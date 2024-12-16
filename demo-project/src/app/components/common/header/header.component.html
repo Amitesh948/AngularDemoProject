@@ -1,0 +1,42 @@
+<header class="header-area header-sticky wow slideInDown" data-wow-duration="0.75s" data-wow-delay="0s">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <nav class="main-nav">
+
+          <a class="logo">
+            <h4>Demo<span>Project</span></h4>
+          </a>
+
+          <ul class="nav">
+            <li><a (click)="sendData('home')">Home</a></li>
+            <li><a (click)="sendData('counter')">Counter</a></li>
+            <li><a (click)="sendData('task')">Task-List</a></li>
+            <li><a (click)="sendData('tabs')">Tabs</a></li>
+            <li><a>Blog</a></li>
+            <li><a>Message Us</a></li>
+            <li>
+              <div class="main-red-button"><a (click)="sendData('login')">Login</a></div>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div *ngIf="currentTab === 'home'">
+  <app-main [count]="currentCount" (sendTasks)="fatchTaskList($event)" [completedTasks]="compledTaskList"></app-main>
+</div>
+<div *ngIf="currentTab === 'counter'">
+  <app-counter (sendCount)="fatchCountValue($event)"></app-counter>
+</div>
+<div *ngIf="currentTab === 'task'">
+  <app-task-list [tasks]="receivedArray" (tasksComplated)="taskCompletedList($event)"></app-task-list>
+</div>
+<div *ngIf="currentTab === 'login'">
+ <app-signup></app-signup>
+</div>
+<div  *ngIf="currentTab === 'tabs'">
+  <app-tabs></app-tabs>
+</div>

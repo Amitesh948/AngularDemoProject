@@ -1,0 +1,25 @@
+<div class="count">
+  <span>Total Count: {{ count }}</span>
+</div>
+<div class="task-container">
+  <input [(ngModel)]="task" id="inp" placeholder="Enter a task" class="task-input">
+  <button (click)="addTask()" class="add-button">Add Task</button>
+
+  <div class="text">
+    <ul *ngFor="let task of tasks; let i = index" class="task-item">
+      {{ task }}
+      <i class="fa-solid fa-trash" (click)="removeTask(i)"></i>
+    </ul>
+  </div>
+</div>
+<div class="todo-container">
+  <h1>To-Do List Completed</h1>
+  <div class="count-display">
+      <span>Total Tasks: {{ completedTasks.length }}</span>
+  </div>
+  <ul class="todo-list">
+      <li *ngFor="let todo of completedTasks">
+          <span >{{ todo }}</span>
+      </li>
+  </ul>
+</div>

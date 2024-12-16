@@ -1,0 +1,13 @@
+  <div class="todo-container">
+    <h1>To-Do List</h1>
+    <div class="count-display">
+        <span>Total Tasks: {{ todoList.length }}</span>
+    </div>
+    <ul class="todo-list">
+        <li *ngFor="let todo of todoList">
+            <input type="checkbox" [(ngModel)]="todo.completed" (change)="toggleTaskCompletion(todo)"/>
+            <span [class.completed]="todo.completed">{{ todo.task }}</span>
+        </li>
+    </ul>
+</div>
+  
