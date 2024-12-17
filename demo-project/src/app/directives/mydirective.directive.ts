@@ -1,14 +1,14 @@
 import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
 
 @Directive({
-  selector: '[appMydirective]'
+  selector: '[appIfNot]'
 })
 export class MydirectiveDirective {
   private hasView = false;
 
   constructor(private templateRef: TemplateRef<any>, private viewContainer: ViewContainerRef) {}
 
-  @Input() set appUnless(condition: boolean) {
+  @Input() set appIfNot(condition: boolean) {
     if (!condition && !this.hasView) {
       this.viewContainer.createEmbeddedView(this.templateRef);
       this.hasView = true;

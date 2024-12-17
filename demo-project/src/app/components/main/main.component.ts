@@ -10,6 +10,7 @@ export class MainComponent {
   @Input() count: number = 0;
   @Input() completedTasks : string[]=[];
   @Output() sendTasks = new EventEmitter<string[]>();
+  isVisible : boolean = false;
   
   task: string = '';
   tasks: string[] = [];
