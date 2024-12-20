@@ -13,6 +13,11 @@ import { MainComponent } from './components/main/main.component';
 import { SignupComponent } from './components/auth/signup/signup.component';
 import { MydirectiveDirective } from './directives/mydirective.directive';
 import { TabsComponent } from './components/tabs/tabs.component';
+import { TextToSpecificLengthPipe } from './pipes/text-to-specific-length.pipe';
+import { ThemeDirective } from './directives/theme.directive';
+import { ProfileComponent } from './components/profile/profile.component';
+import { OverviewComponent } from './components/overview/overview.component';
+import { EditComponent } from './components/edit/edit.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +31,11 @@ import { TabsComponent } from './components/tabs/tabs.component';
     SignupComponent,
     MydirectiveDirective,
     TabsComponent,
+    TextToSpecificLengthPipe,
+    ThemeDirective,
+    ProfileComponent,
+    OverviewComponent,
+    EditComponent,
   ],
   imports: [
     BrowserModule,

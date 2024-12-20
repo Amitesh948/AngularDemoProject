@@ -12,7 +12,7 @@ interface Todo {
 })
 export class HeaderComponent {
 
-  currentTab: string = 'login';
+  currentTab: string = 'home';
   currentCount: number = 0;
   receivedArray: string[] = [];
   compledTaskList: string[] = [];

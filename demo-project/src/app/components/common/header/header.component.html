@@ -12,7 +12,7 @@
             <li><a (click)="sendData('home')">Home</a></li>
             <li><a (click)="sendData('counter')">Counter</a></li>
             <li><a (click)="sendData('task')">Task-List</a></li>
-            <li><a (click)="sendData('tabs')">Tabs</a></li>
+            <li><a routerLink="/profile">Profile</a></li>
             <li><a routerLink="/dashboard/dashboard">Dashboard</a></li>
             <li><a routerLink="/setting/setting">Setting</a></li>
             <li>
@@ -20,25 +20,23 @@
             </li>
           </ul>
         </nav>
-      
-    <router-outlet></router-outlet>
 
-<div *ngIf="currentTab === 'home'">
-  <app-main [count]="currentCount" (sendTasks)="fatchTaskList($event)" [completedTasks]="compledTaskList"></app-main>
-</div>
-<div *ngIf="currentTab === 'counter'">
-  <app-counter (sendCount)="fatchCountValue($event)"></app-counter>
-</div>
-<div *ngIf="currentTab === 'task'">
-  <app-task-list [tasks]="receivedArray" (tasksComplated)="taskCompletedList($event)"></app-task-list>
-</div>
-<div *ngIf="currentTab === 'login'">
- <app-signup></app-signup>
-</div>
-<div  *ngIf="currentTab === 'tabs'">
-  <app-tabs></app-tabs>
-</div>
-</div>
-</div>
+        <router-outlet></router-outlet>
+
+        <div *ngIf="currentTab === 'home'">
+          <app-main [count]="currentCount" (sendTasks)="fatchTaskList($event)"
+            [completedTasks]="compledTaskList"></app-main>
+        </div>
+        <div *ngIf="currentTab === 'counter'">
+          <app-counter (sendCount)="fatchCountValue($event)"></app-counter>
+        </div>
+        <div *ngIf="currentTab === 'task'">
+          <app-task-list [tasks]="receivedArray" (tasksComplated)="taskCompletedList($event)"></app-task-list>
+        </div>
+        <div *ngIf="currentTab === 'login'">
+          <app-signup></app-signup>
+        </div>
+      </div>
+    </div>
   </div>
 </header>
