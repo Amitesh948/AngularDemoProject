@@ -1,0 +1,28 @@
+<div class="container">
+    <h2>Add Task</h2>
+    <form #taskForm="ngForm" (ngSubmit)="onSubmit(taskForm)">
+        <div class="form-group">
+            <label for="title">Task Title</label>
+            <input type="text" id="title" name="title" class="form-control" [(ngModel)]="newTask.title" required
+                minlength="3" />
+            <div *ngIf="taskForm.controls['title']?.invalid && (taskForm.controls['title']?.touched || taskForm.submitted)"
+                class="text-danger">
+                <div *ngIf="taskForm.controls['title']?.errors?.['required']">Title is required.</div>
+                <div *ngIf="taskForm.controls['title']?.errors?.['minlength']">Title must be at least 3 characters long.
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="description">Task Description</label>
+            <textarea id="description" name="description" class="form-control" [(ngModel)]="newTask.description" required
+                minlength="10"></textarea>
+            <div *ngIf="taskForm.controls['description']?.invalid && (taskForm.controls['description']?.touched || taskForm.submitted)"
+                class="text-danger">
+                <div *ngIf="taskForm.controls['description']?.errors?.['required']">Description is required.</div>
+                <div *ngIf="taskForm.controls['description']?.errors?.['minlength']">Description must be at least 10
+                    characters long.</div>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary" [disabled]="!taskForm.valid">Add Task</button>
+    </form>
+</div>
