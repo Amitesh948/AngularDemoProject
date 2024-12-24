@@ -1,6 +1,7 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, SimpleChanges, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
-import { SignalService } from 'src/app/service/signal.service';
+import { debounceTime, delay } from 'rxjs';
+import { CommonService } from 'src/app/service/common.service';
 import { passwordMatchValidator } from 'src/app/validators/password-match-validator';
 
 @Component({
@@ -9,37 +10,26 @@ import { passwordMatchValidator } from 'src/app/validators/password-match-valida
   styleUrls: ['./exercise.component.css']
 })
 export class ExerciseComponent implements OnInit {
-
   isSubmittedLogin: boolean = false;
   isSubmittedSignUp: boolean = false;
   form: FormGroup | any;
-  addvalidation:boolean = false;
+  addvalidation: boolean = false;
+  countries: any = [];
+  states: any = [];
+  selectedCountry: any;
 
-  dummyData = {
-    fname: "John", // Valid name with at least 2 characters
-    lname: "Doe", // Valid name
-    email: "john.doe@example.com", // Valid email format
-    locality: "123 Elm Street", // Valid locality
-    address: "Apt 456, Springfield", // Valid address
-    state: "California", // Valid state
-    zip: "12345", // Valid 5-digit zip code
-    country: "United States", // Valid country name
-    dob: "1990-01-01", // Valid date in YYYY-MM-DD format
-    gender: "male", // Valid gender option
-    phone: "1234567890", // Valid 10-digit phone number
-    password: "password123", // Valid password with at least 6 characters
-    confirmPassword: "password123" // Matches the password field
-  };
-
-
-  constructor(private fb: FormBuilder,private signal:SignalService) { }
+  constructor(private fb: FormBuilder, private common: CommonService) {
+  }
+  ngOnChanges(changes: SimpleChanges): void {
+  
+  }
 
   ngOnInit(): void {
     this.form = this.fb.group(
       {
         fname: ["", [Validators.required, Validators.minLength(2)]],
         lname: ["", [Validators.required]],
-        email: ["", [Validators.required, Validators.email]],
+        email1: ["", [Validators.required, Validators.email]],
         locality: ["", [Validators.required]],
         address: ["", [Validators.required]],
         state: ["", [Validators.required]],
@@ -47,22 +37,38 @@ export class ExerciseComponent implements OnInit {
         country: ["", [Validators.required]],
         dob: ["", [Validators.required]],
         gender: ["", [Validators.required]],
-        phone: ["", [Validators.required]],
+        phone: [""],
         password: ["", [Validators.required, Validators.minLength(6)]],
         confirmPassword: ["", [Validators.required]],
       },
-      { validators: passwordMatchValidator('password', 'confirmPassword') }
+      { validators: passwordMatchValidator('password', 'confirmPassword') },
+
     );
-    console.log('this is',this.form);
-    
 
-    this.form.get('fname').valueChanges.subscribe((forms:any)=>{
-      console.log(forms);
-      
-    })
+    // this.makeApiCall();
+    this.countries = this.common.getAllCountries();
+    this.form.get('country')?.valueChanges.subscribe((selectedCountry: any) => {
+      if (selectedCountry) {
+        this.selectedCountry = JSON.parse(selectedCountry)
+        this.CountryChange(this.selectedCountry);
+      }
+    });
 
-    // this.form.patchValue(this.dummyData)
-    
+
+    this.form.get('phone')?.valueChanges
+      .pipe(delay(300))
+      .subscribe((phoneCode: any) => {
+        if (phoneCode) {          
+          this.form.controls['phone'].setValidators([
+            Validators.required,
+            Validators.pattern(/^\d{10}$/),
+            Validators.minLength(10)
+          ]);
+        } else {
+          this.form.controls['phone'].setValidators([]);
+        }
+        this.form.controls['phone'].updateValueAndValidity();
+      });
   }
 
 
@@ -71,20 +77,47 @@ export class ExerciseComponent implements OnInit {
     console.log("exercise", form.value);
   }
 
-  onSubmitReactive() {    
-    this.signal.setData(this.form.value)
+  onSubmitReactive() {
+    if (!this.form.valid) {
+      console.log("invalid form", this.form)
+    } else {
+      console.log(this.form.value);
+      localStorage.setItem("formdata",JSON.stringify(this.form.value));
+      localStorage.removeItem("loglevel");
+      this.common.userSubject.next(this.form.value)
+    }
+    this.common.behaviorSubject.next('Updated Value!');
+
   }
 
   applyValidationOfPattern() {
-    this.addvalidation = !this.addvalidation;
-    if(this.addvalidation) {
-      this.form.controls['phone'].setValidators([Validators.required, Validators.pattern(/^\d{10}$/)]);
-      this.form.controls['phone'].updateValueAndValidity()
-    } else {
-      this.form.controls['phone'].setValidators([Validators.required]);
-      this.form.controls['phone'].updateValueAndValidity()
-    }
-
+    // this.addvalidation = !this.addvalidation;
+    // if (this.addvalidation) {
+    //   this.form.controls['phone'].setValidators([Validators.required, Validators.pattern(/^\d{10}$/)]);
+    //   this.form.controls['phone'].updateValueAndValidity()
+    // } else {
+    //   this.form.controls['phone'].setValidators([Validators.required]);
+    //   this.form.controls['phone'].updateValueAndValidity()
+    // }
   }
 
+  makeApiCall() {
+    this.common.sendRequest('get', {}, 'countries').subscribe({
+      next: (response) => {
+        this.countries = response;
+      }
+    });
+  }
+
+  CountryChange(country: any) {
+    this.states = this.common.getAllState(country.isoCode);
+    const phoneCode = '+' + country.phonecode;
+    // this.setPhoneCode(phoneCode);
+
+  }
+  setPhoneCode(phoneCode: string) {
+    this.form.patchValue({
+      phone: phoneCode
+    });
+  }
 }

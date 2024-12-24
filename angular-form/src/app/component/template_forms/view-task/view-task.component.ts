@@ -15,9 +15,5 @@ export class ViewTaskComponent {
   ngOnInit(): void {    
    this.tasks=this.taskservice.getTasks();
 
-   this.signal.getDataSignal().subscribe((r:any) => {
-    console.log(r);
-    
-   })
   }
 }

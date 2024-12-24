@@ -10,9 +10,9 @@ export class SignalService {
   private formDataSignal = signal<any>({  });
 
   // Method to get the current value of the signal
-  getDataSignal() {
-    return this.formDataSignal();  // Call the signal to get the current value
-  }
+  // getDataSignal() {
+  //   return this.formDataSignal();  // Call the signal to get the current value
+  // }
 
   // Method to update the value of the signal
   setData(newValue: string) {   

@@ -134,7 +134,7 @@
     </div>
     <div class="card mt-4 p-4 col-md-12">
         <h3 class="text-center mb-4"> Reactive forms example</h3>
-        <button (click)="applyValidationOfPattern()">Apply validations of pattern</button>
+        <!-- <button (click)="applyValidationOfPattern()">Apply validations of pattern</button> -->
         <form [formGroup]="form" (ngSubmit)="onSubmitReactive()">
             <div class="row jumbotron box8">
                 <!-- First Name -->
@@ -166,14 +166,14 @@
                 <!-- Email -->
                 <div class="col-sm-6 form-group">
                     <label for="email">Email</label>
-                    <input type="email" class="form-control" formControlName="email" id="email"
+                    <input type="email" class="form-control" formControlName="email1" id="email1"
                         placeholder="Enter your email." />
                     <small class="text-danger"
-                        *ngIf="form.get('email')?.touched && form.get('email')?.errors?.['required']">
+                        *ngIf="form.get('email1')?.touched && form.get('email1')?.errors?.['required']">
                         Email is required.
                     </small>
                     <small class="text-danger"
-                        *ngIf="form.get('email')?.touched && form.get('email')?.errors?.['email']">
+                        *ngIf="form.get('email1')?.touched && form.get('email1')?.errors?.['email1']">
                         Please enter a valid email address.
                     </small>
                 </div>
@@ -203,8 +203,10 @@
                 <!-- State -->
                 <div class="col-sm-6 form-group">
                     <label for="State">State</label>
-                    <input type="text" class="form-control" formControlName="state" id="State"
-                        placeholder="Enter your state name." />
+                        <select formControlName="state" class="form-control custom-select">
+                            <option value="" disabled>Select State</option>
+                            <option *ngFor="let item of states" [value]="item.name">{{item.name}}</option>
+                        </select>
                     <small class="text-danger"
                         *ngIf="form.get('state')?.touched && form.get('state')?.errors?.['required']">
                         State is required.
@@ -229,16 +231,14 @@
                     <label for="Country">Country</label>
                     <select formControlName="country" class="form-control custom-select">
                         <option value="" disabled>Select Country</option>
-                        <option value="Afghanistan">Afghanistan</option>
-                        <option value="United States">United States</option>
-                        <option value="India">India</option>
+                        <option *ngFor="let item of countries" [value]="item | json">{{item.name}}</option>
+                        
                     </select>
                     <small class="text-danger"
                         *ngIf="form.get('country')?.touched && form.get('country')?.errors?.['required']">
                         Country is required.
                     </small>
                 </div>
-
                 <!-- Date of Birth -->
                 <div class="col-sm-6 form-group">
                     <label for="Date">Date of Birth</label>
@@ -303,7 +303,7 @@
                         *ngIf="form.get('confirmPassword')?.touched && form.get('confirmPassword')?.errors?.['required']">
                         Confirm Password is required.
                     </small>
-                    <small class="text-danger" *ngIf="form.errors?.['passwordMismatch']">
+                    <small class="text-danger" *ngIf="form.errors?.['passwordMismatch'] && form.get('confirmPassword').value">
                         Passwords do not match.
                       </small>
                       
@@ -320,4 +320,8 @@
 
 
 
-<app-view-task></app-view-task>
+
+
+
+
+

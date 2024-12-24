@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -14,6 +13,9 @@ import { UpdateTaskTemplateFormComponent } from './component/template_forms/upda
 import { DeleteTaskTemplateFormComponent } from './component/template_forms/delete-task-template-form/delete-task-template-form.component';
 import { ViewTaskComponent } from './component/template_forms/view-task/view-task.component';
 import { ExerciseComponent } from './component/exercise/exercise.component';
+import { HTTP_INTERCEPTORS , HttpClientModule } from '@angular/common/http';
+import { AuthInterceptor } from './interceptor/auth.interceptor';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -32,9 +34,16 @@ import { ExerciseComponent } from './component/exercise/exercise.component';
     AppRoutingModule,
     NgbModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    HttpClientModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true 
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
